@@ -22,10 +22,6 @@ able to provide the dimensions.
 
 This component supports most of the props of `FlatList` plus a few extras one:
 
-#### `getHeightForItem: ({ item: any, index: number }) => number,`
-
-Returns the height for a specific item. Note that this it *not* optional for now.
-
 #### `numColumns: number`
 
 The number of columns.
@@ -41,8 +37,6 @@ Play with on [Expo](https://exp.host/@appandflow/masonry-list-example)
 Take a look at [example folder](https://github.com/AppAndFlow/react-native-masonry-list/blob/master/example)
 
 ## TODO
-
-- Support measuring items automatically and get rid of `getHeightForItem`.
 
 - Implement onEndReached in a way that it isn't called multiple times.
 
