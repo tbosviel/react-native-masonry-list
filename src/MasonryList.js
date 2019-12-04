@@ -17,7 +17,7 @@ type Column = {
   heights: Array<number>,
 };
 
-const _stateFromProps = ({ numColumns, data, getHeightForItem }) => {
+const _stateFromProps = ({ numColumns, data }) => {
   const columns: Array<Column> = Array.from({
     length: numColumns,
   }).map((col, i) => ({
@@ -28,14 +28,11 @@ const _stateFromProps = ({ numColumns, data, getHeightForItem }) => {
   }));
 
   data.forEach((item, index) => {
-    const height = getHeightForItem({ item, index });
     const column = columns.reduce(
-      (prev, cur) => (cur.totalHeight < prev.totalHeight ? cur : prev),
+      (prev, cur) => (cur.data.length < prev.data.length ? cur : prev),
       columns[0],
     );
     column.data.push(item);
-    column.heights.push(height);
-    column.totalHeight += height;
   });
 
   return { columns };
@@ -44,10 +41,9 @@ const _stateFromProps = ({ numColumns, data, getHeightForItem }) => {
 export type Props = {
   data: Array<any>,
   numColumns: number,
-  renderItem: ({ item: any, index: number, column: number }) => ?React.Element<
+  renderItem: ({ item: any, index: number, column: number }) =>?React.Element<
     any,
-  >,
-  getHeightForItem: ({ item: any, index: number }) => number,
+    >,
   ListHeaderComponent?: ?React.ComponentType<any>,
   ListEmptyComponent?: ?React.ComponentType<any>,
   /**
@@ -231,7 +227,6 @@ export default class MasonryList extends React.Component<Props, State> {
     if (ListEmptyComponent) {
       emptyElement = <ListEmptyComponent />;
     }
-
     const content = (
       <View style={styles.contentContainer}>
         {this.state.columns.map(col =>
@@ -242,8 +237,6 @@ export default class MasonryList extends React.Component<Props, State> {
             data={col.data}
             getItemCount={this._getItemCount}
             getItem={this._getItem}
-            getItemLayout={(data, index) =>
-              this._getItemLayout(col.index, index)}
             renderItem={({ item, index }) =>
               renderItem({ item, index, column: col.index })}
             renderScrollComponent={this._renderScrollComponent}
